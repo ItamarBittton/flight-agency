@@ -1,0 +1,90 @@
+<title>Login</title>
+<link href="https://fonts.googleapis.com/css?family=Baloo+Bhaijaan" rel="stylesheet">
+<style>
+    @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css");
+
+    a.btn-social,
+    .btn-social {
+        border-radius: 50%;
+        color: #ffffff !important;
+        display: inline-block;
+        height: 54px;
+        line-height: 54px;
+        margin: 8px 4px;
+        text-align: center;
+        text-decoration: none;
+        transition: background-color .3s;
+        webkit-transition: background-color .3s;
+        width: 54px;
+    }
+
+    .btn-social .fa,
+    .btn-social i {
+        padding-top: 33.3333%;
+        backface-visibility: hidden;
+        moz-backface-visibility: hidden;
+        ms-transform: scale(1);
+        o-transform: scale(1);
+        transform: scale(1);
+        transition: all .25s;
+        webkit-backface-visibility: hidden;
+        webkit-transform: scale(1);
+        webkit-transition: all .25s;
+    }
+
+    .btn-social:hover,
+    .btn-social:focus {
+        color: #fff;
+        outline: none;
+        text-decoration: none;
+    }
+
+    .btn-social:hover .fa,
+    .btn-social:focus .fa,
+    .btn-social:hover i,
+    .btn-social:focus i {
+        ms-transform: scale(1.3);
+        o-transform: scale(1.3);
+        transform: scale(1.3);
+        webkit-transform: scale(1.3);
+    }
+
+    .btn-google-plus {
+        background-color: #dd4b39;
+    }
+
+    .btn-google-plus:hover {
+        background-color: #e47365;
+    }
+    /*
+    body {
+        background-image: url(https://cdn.pixabay.com/photo/2013/11/30/15/56/wing-221526_960_720.jpg) !important;
+        background-size: cover;
+    }*/
+
+    body {
+        background-color: #00aced;
+    }
+
+    h1 {
+        font-family: 'Baloo Bhaijaan', cursive;
+    }
+</style>
+
+<center>
+    <h1>Welcome!</h1>
+
+    <a target="_blank" class="btn-social btn-google-plus"><i class="fa fa-google-plus"></i></a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script>
+        var windowOpened;
+        function login() {
+            $.get('/login', function (data) {
+                window.location.href = data;
+            })
+        }
+        
+        $('a').click(login);
+    </script>
+</center>

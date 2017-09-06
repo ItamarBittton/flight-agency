@@ -1,0 +1,37 @@
+<div class="row" style="margin-top:15px">
+
+    <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+        <rd-widget>
+            <rd-widget-header icon="icon-notebook" title="עדכון הזמנות">
+                <button ng-click="update('invitations', invitationIdArr)" class="btn btn-sm btn-info pull-left">עדכון הזמנות</button>
+                <input type="text" placeholder="חיפוש" ng-model="searchText" class="form-control input-sm">
+            </rd-widget-header>
+            <rd-widget-body classes="xxlarge no-padding">
+                <span ng-if="!load">
+                <rd-loading></rd-loading>
+                </span>
+                <span ng-if="load">
+                    <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <td>קבלה ישראל</td>
+              <td>קבלה חו"ל</td>
+              <td>נכנס כסף מגמא</td>
+              <td>שולם חול</td>
+            </thead>
+            <tbody>
+              <tr ng-repeat="invitation in invitations track by $index">
+                <td ng-click="invitation.israel_receipt = !invitation.israel_receipt">{{ invitation.israel_receipt }}</td>
+                <td ng-click="invitation.usa_receipt = !invitation.usa_receipt">{{ invitation.usa_receipt }}</td>
+                <td ng-click="invitation.gama_paid = !invitation.gama_paid">{{ invitation.gama_paid }}</td>
+                <td ng-click="invitation.vendor_paid = !invitation.vendor_paid">{{ invitation.vendor_paid }}</td>
+                <td>
+                    <input type="checkbox" checklist-model="invitationIdArr" checklist-value="invitation.id">
+                </td>
+          </tr></tbody></table>
+        </div>
+                </span>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>

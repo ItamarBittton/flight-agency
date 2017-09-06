@@ -1,0 +1,122 @@
+<div class="row" style="margin-top:15px">
+
+    <div class="col-lg-4">
+        <rd-widget ng-if="display">
+            <rd-widget-header icon="icon-note" title="פרטי נקודות">
+                <button ng-click="save(false)" class="btn btn-sm btn-info">שמור</button>
+                <button ng-click="save(true)" class="btn btn-sm btn-danger">מחק</button>
+                <button ng-click="close()" class="btn btn-sm btn-warning">בטל</button>
+            </rd-widget-header>
+            <rd-widget-body classes="xxlarge no-padding">
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">מזהה</label>
+                    <div class="col-md-8">
+                        <input type="text" ng-model="tempPoint.id" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">שם</label>
+                    <div class="col-md-8">
+                        <input type="text" ng-model="tempPoint.name" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">סוג נקודות</label>
+                    <div class="col-md-8">
+                        <input type="text" ng-model="tempPoint.point_type" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">תאריך</label>
+                    <div class="col-md-8">
+                        <input type="text" ng-model="tempPoint.date" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">כמות</label>
+                    <div class="col-md-8">
+                        <input type="text" ng-model="tempPoint.amount" class="form-control">
+                    </div>
+                </div>
+                 <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">תשלום</label>
+                    <div class="col-md-8">
+                        <input type="text" ng-model="tempPoint.paid" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">דרך תשלום</label>
+                    <div class="col-md-8">
+                        <input type="text" ng-model="tempPoint.pay_method_id" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">שם משתמש</label>
+                    <div class="col-md-8">
+                        <input type="text" ng-model="tempPoint.username" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">סיסמא</label>
+                    <div class="col-md-8">
+                        <input type="text" ng-model="tempPoint.password" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">איזון</label>
+                    <div class="col-md-8">
+                        <input type="text" ng-model="tempPoint.balance" class="form-control">
+                    </div>
+                </div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+
+    <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+        <rd-widget>
+            <rd-widget-header icon="icon-notebook" title="נקודות">
+                <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף נקודות</button>
+                <input type="text" placeholder="חיפוש" ng-model="searchText" class="form-control input-sm">
+                <button class="btn btn-link btn-sm ng-scope" style="padding:0;margin: -5px 0 -10px">
+                    <dir-pagination-controls max-size="7"></dir-pagination-controls>
+                </button>
+            </rd-widget-header>
+            <rd-widget-body classes="xxlarge no-padding">
+                <span ng-if="!load">
+                <rd-loading></rd-loading>
+                </span>
+                <span ng-if="load">
+                    <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <td>מזהה</td>
+              <td>שם</td>
+              <td>סוג נקודות</td>
+              <td>תאריך</td>
+              <td>כמות</td>
+              <td>תשלום</td>
+              <td>דרך תשלום</td>
+              <td>שם משתמש</td>
+              <td>סיסמא</td>
+              <td>איזון</td>
+            </thead>
+            <tbody>
+              <tr dir-paginate="($index, point) in points | itemsPerPage:15">
+                <td ng-click="edit($index)">{{ point.id }}</td>
+                <td ng-click="edit($index)">{{ point.name }}</td>
+                <td ng-click="edit($index)">{{ point.point_type }}</td>
+                <td ng-click="edit($index)">{{ point.date }}</td>
+                <td ng-click="edit($index)">{{ point.amount }}</td>
+                <td ng-click="edit($index)">{{ point.paid }}</td>
+                <td ng-click="edit($index)">{{ point.pay_method_id }}</td>
+                <td ng-click="edit($index)">{{ point.username }}</td>
+                <td ng-click="edit($index)">{{ point.password }}</td>
+                <td ng-click="edit($index)">{{ point.balance }}</td>
+            </tr></tbody>
+          </table>
+        </div>
+                </span>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="row" style="margin-top:15px">
+
+    <div class="col-lg-4">
+        <rd-widget ng-if="display">
+            <rd-widget-header icon="icon-note" title="פרטי לקוח">
+                <button ng-click="save(false)" class="btn btn-sm btn-info">שמור</button>
+                <button ng-click="save(true)" class="btn btn-sm btn-danger">מחק</button>
+                <button ng-click="close()" class="btn btn-sm btn-warning">בטל</button>
+                <button ng-click="save(false)" class="btn btn-sm btn-info">
+                    <a ui-sref="invitations({customerId: tempCustomer.id})" ui-sref-active="active">עבור להזמנות עבור הלקוח <span class="menu-icon fa fa-tachometer"></span></a>
+                </button>
+            </rd-widget-header>
+            <rd-widget-body classes="xxlarge no-padding">
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">תעודת זהות</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempCustomer.id" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">שם לקוח</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempCustomer.name" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">טלפון</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempCustomer.phone" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">אימייל</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempCustomer.email" class="form-control">
+                    </div>
+                </div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+
+    <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+        <rd-widget>
+            <rd-widget-header icon="icon-notebook" title="לקוחות">
+                <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף לקוח</button>
+                <input type="text" placeholder="חיפוש" ng-model="searchText" class="form-control input-sm">
+            </rd-widget-header>
+            <rd-widget-body classes="xxlarge no-padding">
+                <span ng-if="!load">
+                <rd-loading></rd-loading>
+                </span>
+                <span ng-if="load">
+                    <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <td>תעודת זהות</td>
+              <td>שם לקוח</td>
+              <td>טלפון</td>
+              <td>אימייל</td>
+            </thead>
+            <tbody>
+              <tr ng-repeat="customer in customers track by $index">
+                <td ng-click="edit($index)">{{ customer.id }}</td>
+                <td ng-click="edit($index)">{{ customer.name }}</td>
+                <td ng-click="edit($index)">{{ customer.phone }}</td>
+                <td ng-click="edit($index)">{{ customer.email }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+                </span>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>

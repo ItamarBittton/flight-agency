@@ -1,0 +1,87 @@
+<div class="row" style="margin-top:15px">
+
+    <div class="col-lg-4">
+        <rd-widget ng-if="display">
+            <rd-widget-header icon="icon-note" title="פרטי הכנסה">
+                <button ng-click="save(false)" class="btn btn-sm btn-info">שמור</button>
+                <button ng-click="save(true)" class="btn btn-sm btn-danger">מחק</button>
+                <button ng-click="close()" class="btn btn-sm btn-warning">בטל</button>
+            </rd-widget-header>
+            <rd-widget-body classes="xxlarge no-padding">
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">מזהה</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempIncome.id" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">מספר הזמנה</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempIncome.order_id" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">בשקלים</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempIncome.shekels" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">דולרים</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempIncome.dollars" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">תאריך</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempIncome.date" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">דרך תשלום</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempIncome.pay_method_id" class="form-control">
+                    </div>
+                </div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+
+    <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+        <rd-widget>
+            <rd-widget-header icon="icon-notebook" title="הכנסות">
+                <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף הכנסה</button>
+                <input type="text" placeholder="חיפוש" ng-model="searchText" class="form-control input-sm">
+            </rd-widget-header>
+            <rd-widget-body classes="xxlarge no-padding">
+                <span ng-if="!load">
+                <rd-loading></rd-loading>
+                </span>
+                <span ng-if="load">
+                    <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <td>מזהה</td>
+              <td>מספר הזמנה</td>
+              <td>שקלים</td>
+              <td>דולרים</td>
+              <td>תאריך</td>
+              <td>דרך תשלום</td>
+            </thead>
+            <tbody>
+              <tr ng-repeat="income in incomes track by $index">
+                <td ng-click="edit($index)">{{ income.id }}</td>
+                <td ng-click="edit($index)">{{ income.order_id }}</td>
+                <td ng-click="edit($index)">{{ income.shekels }}</td>
+                <td ng-click="edit($index)">{{ income.dollars }}</td>
+                <td ng-click="edit($index)">{{ income.date }}</td>
+                <td ng-click="edit($index)">{{ income.pay_method_id }}</td>
+            </tr></tbody>
+          </table>
+        </div>
+                </span>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>

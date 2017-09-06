@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" ng-app="RDash">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>סוכנות נסיעות</title>
+  <!-- STYLES -->
+  <link rel="stylesheet" href="lib/css/main.min.css"/>
+  <!-- SCRIPTS -->
+  <script src="lib/js/main.min.js"></script>
+  <!-- Custom Scripts -->
+  <script type="text/javascript" src="js/dashboard.min.js"></script>
+</head>
+
+<body ng-controller="MasterCtrl">
+  <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+      <ul class="sidebar">
+        <li class="sidebar-main">
+          <a ng-click="toggleSidebar()">
+            ניהול מערכת
+            <span class="menu-icon glyphicon glyphicon-transfer"></span>
+          </a>
+        </li>
+        <li class="sidebar-title"><span>תפריט</span></li>
+        <li class="sidebar-list">
+          <a ui-sref="index" ui-sref-active="active">דף הבית <span class="menu-icon fa fa-tachometer"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="potentials" ui-sref-active="active">פוטנציאלים <span class="menu-icon fa fa-tachometer"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="invitations" ui-sref-active="active">הזמנות <span class="menu-icon fa fa-tachometer"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="customers" ui-sref-active="active">לקוחות <span class="menu-icon fa fa-tachometer"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="actions" ui-sref-active="active">פעולות <span class="menu-icon fa fa-tachometer"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="reports" ui-sref-active="active">דוחות <span class="menu-icon fa fa-tachometer"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="expenses" ui-sref-active="active">הוצאות <span class="menu-icon fa fa-tachometer"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="incomes" ui-sref-active="active">הכנסות <span class="menu-icon fa fa-tachometer"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="points" ui-sref-active="active">נקודות <span class="menu-icon fa fa-tachometer"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="loans" ui-sref-active="active">הלוואות <span class="menu-icon fa fa-tachometer"></span></a>
+        </li>
+      </ul>
+      <!--<div class="sidebar-footer">
+        <div class="col-xs-4">
+          <a target="_blank">
+            Github
+          </a>
+        </div>
+        <div class="col-xs-4">
+          <a  target="_blank">
+            About
+          </a>
+        </div>
+        <div class="col-xs-4">
+          <a href="#">
+            Support
+          </a>
+        </div>
+      </div>-->
+    </div>
+    <!-- End Sidebar -->
+
+    <div id="content-wrapper">
+      <div class="page-content">
+
+        <!-- Header Bar -->
+        <div class="row header">
+          <div class="col-xs-12">
+            <div class="user pull-right">
+
+              <div class="item dropdown" uib-dropdown>
+                <!--<a href="#" class="dropdown-toggle" uib-dropdown-toggle>
+                  <i class="fa fa-bell-o"></i>
+                </a>-->
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <!--<li class="dropdown-header">
+                    Notifications
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="#">Server Down!</a>
+                  </li>-->
+                </ul>
+              </div>
+            </div>
+            <div class="meta">
+              <div class="page">
+                גנים
+              </div>
+              <div class="breadcrumb-links">
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Header Bar -->
+
+        <!-- Main Content -->
+        <div ui-view></div>
+
+      </div>
+      <!-- End Page Content -->
+    </div>
+    <!-- End Content Wrapper -->
+  </div>
+  <!-- End Page Wrapper -->
+</body>
+
+</html>

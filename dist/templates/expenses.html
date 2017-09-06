@@ -1,0 +1,79 @@
+<div class="row" style="margin-top:15px">
+
+    <div class="col-lg-4">
+        <rd-widget ng-if="display">
+            <rd-widget-header icon="icon-note" title="פרטי הוצאה">
+                <button ng-click="save(false)" class="btn btn-sm btn-info">שמור</button>
+                <button ng-click="save(true)" class="btn btn-sm btn-danger">מחק</button>
+                <button ng-click="close()" class="btn btn-sm btn-warning">בטל</button>
+            </rd-widget-header>
+            <rd-widget-body classes="xxlarge no-padding">
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">מזהה</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempExpense.id" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">מקור</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempExpense.origin" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">קטגורית הוצאה</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempExpense.expense_category_id" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">תאריך</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempExpense.date" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group form-md-line-input">
+                    <label class="col-md-4 control-label">כמות</label>
+                    <div class="col-md-8">
+                        <input name="lastName" type="text" ng-model="tempExpense.amount" class="form-control">
+                    </div>
+                </div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+
+    <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+        <rd-widget>
+            <rd-widget-header icon="icon-notebook" title="הוצאות">
+                <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף הוצאה</button>
+                <input type="text" placeholder="חיפוש" ng-model="searchText" class="form-control input-sm">
+            </rd-widget-header>
+            <rd-widget-body classes="xxlarge no-padding">
+                <span ng-if="!load">
+                <rd-loading></rd-loading>
+                </span>
+                <span ng-if="load">
+                    <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <td>מזהה</td>
+              <td>מקור</td>
+              <td>קטריית הוצאה</td>
+              <td>תאריך</td>
+              <td>כמות</td>
+            </thead>
+            <tbody>
+              <tr ng-repeat="expense in expenses track by $index">
+                <td ng-click="edit($index)">{{ expense.id }}</td>
+                <td ng-click="edit($index)">{{ expense.origin }}</td>
+                <td ng-click="edit($index)">{{ expense.expense_category_id }}</td>
+                <td ng-click="edit($index)">{{ expense.date }}</td>
+                <td ng-click="edit($index)">{{ expense.amount }}</td>
+            </tr></tbody>
+          </table>
+        </div>
+                </span>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>
