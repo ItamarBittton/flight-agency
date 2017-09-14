@@ -8,45 +8,6 @@ var mysql = require('mysql'),
     }
     );
 
-var tableStruct = {
-    tb_student: [
-        'id',
-        'supported_id',
-        'first_name',
-        'last_name',
-        'phone',
-        'street',
-        'house',
-        'city',
-        'bank',
-        'branch',
-        'account',
-        'account_name',
-        'colel_id'
-    ],
-    tb_recomend: [
-        'user_update',
-        'type',
-        'requested_date',
-        'approved_date',
-        'status',
-        'table_name',
-        'data',
-    ],
-    tb_colel: [
-        'id',
-        'name',
-        'address',
-        'mail_address',
-        'phone',
-        'manager_name',
-        'is_only_daily',
-        'is_prev_month',
-        'schedule',
-        'note'
-    ]
-}
-
 function validate(string) {
     // var r = `/('(''|[^'])*')|(;)|(\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|INSERT( +INTO){0,1}|MERGE|SELECT|UPDATE|UNION( +ALL){0,1})\b/g)`;
     // return string ? string.toString().replace(r, "") : '';
@@ -67,7 +28,7 @@ function multiQuery(object, callback) {
     });
 }
 
-function query(string, callback) {
+function query(string, callback, arr = []) {
     pool.getConnection(function (err, connection) {
         if (err) {
             console.error('Error by the connection: ')
@@ -75,7 +36,28 @@ function query(string, callback) {
             console.log(process.env)
             throw err;
         } else {
-            connection.query(string, function (error, results = [], fields = []) {
+            connection.query(string, arr, function (error, results = [], fields = []) {
+                connection.release();
+
+                if (error) console.error(error);
+                callback({
+                    error,
+                    results,
+                    fields
+                });
+            });
+        }
+    });
+}
+
+function queryMul(string, arr, callback) {
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.error('Error by the connection: ')
+            console.log(err);
+            throw err;
+        } else {
+            connection.query(string, arr, function (error, results = [], fields = []) {
                 connection.release();
 
                 if (error) console.error(error);
@@ -128,10 +110,66 @@ function insertArray(table, array, duplicate) {
     return request.join(' ');
 }
 
+function selectAll(tableName, callback) {
+    query(`SELECT *
+           FROM ${tableName}`,
+        function (data) {
+            callback(data.error, data.results);
+        });
+}
+
+function updateRow(tableName, arr, keys, callback) {
+    query(`REPLACE INTO ${tableName} (${keys.map(val => val)}) VALUES (${keys.map(val => '? ')})`
+        , function (data) {
+            callback(data.error, data.results);
+        },
+        arr)
+}
+
+function deleteRow(tableName, id, callback) {
+    query(`DELETE FROM ${tableName} WHERE id = ?`,
+        function (data) {
+            callback(data.error, data.results);
+        }, [id])
+}
+
+var selectQuery = {
+
+
+    getInvitations: (callback) => {
+        query(`select t1.*, t2.name as customer_name, t3.code_desc as product_name, t4.shekels, t4.dollars
+    from tb_orders t1 
+    left outer join tb_customers t2 on (t1.customer_id = t2.id) 
+    left outer join tbk_products t3 on (t1.product_id = t3.code)
+    left outer join (select order_id, sum(shekels) as shekels, sum(dollars) as dollars
+                     from tb_incomes
+                     group by order_id) t4 on (t1.id = t4.order_id)
+                     where status_id = 4`, function (data) {
+                callback(data.error, data.results);
+            });
+    },
+
+    getPotentials: (callback) => {
+        query(`select t1.*, t2.name as customer_name, t2.phone as customer_phone, t3.*, t4.*
+                   from tb_orders t1 
+                        left outer join tb_customers t2 on (t1.customer_id = t2.id)
+                        left outer join tbk_products t3 on (t1.product_id = t3.code)
+                        left outer join tbk_status t4 on (t1.status_id = t4.code)
+                   where t1.status_id != 4`, function(data){
+                       callback(data.error, data.results);
+                   })
+    }
+
+}
+
 module.exports = {
     v: validate,
     mq: multiQuery,
     q: query,
     i: insert,
-    ia: insertArray
+    ia: insertArray,
+    selectAll: selectAll,
+    updateRow: updateRow,
+    deleteRow: deleteRow,
+    selectQuery: selectQuery
 };

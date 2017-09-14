@@ -59,7 +59,7 @@
               <td>אימייל</td>
             </thead>
             <tbody>
-              <tr ng-repeat="customer in customers track by $index">
+              <tr ng-repeat="($index, customer) in customers | filter:searchText">
                 <td ng-click="edit($index)">{{ customer.id }}</td>
                 <td ng-click="edit($index)">{{ customer.name }}</td>
                 <td ng-click="edit($index)">{{ customer.phone }}</td>

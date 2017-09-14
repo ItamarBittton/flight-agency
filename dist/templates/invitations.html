@@ -11,25 +11,36 @@
                 <div class="form-group form-md-line-input">
                     <label class="col-md-4 control-label">תאריך</label>
                     <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempInvitation.date" class="form-control">
+                        <input name="lastName" type="date" placeholder="yyyy-MM-dd" ng-model="tempInvitation.date" class="form-control">
                     </div>
                 </div>
                 <div class="form-group form-md-line-input">
                     <label class="col-md-4 control-label">שם לקוח</label>
                     <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempInvitation.customer_name" class="form-control">
+                        <!--<input name="lastName" type="text" ng-model="tempInvitation.customer_name" class="form-control">-->
+                        <select ng-model="tempInvitation.customer_id" ng-options="customer.id as customer.name for customer in customers" class="form-control">
+						</select>
+                        <!--<md-autocomplete ng-disabled="isDisabled" md-no-cache="noCache" md-selected-item="tempInvitation.customer_name" md-search-text="searchText"
+                            md-items="item in customers" md-item-text="item.name" md-min-length="0" placeholder="בחר לקוח" md-menu-class="form-control">
+                            <md-item-template>
+                                <span>
+                                    <span> {{item.name}} | {{item.id}}</span>
+                                </span>
+                            </md-item-template>
+                        </md-autocomplete>-->
                     </div>
                 </div>
                 <div class="form-group form-md-line-input">
                     <label class="col-md-4 control-label">מוצר</label>
                     <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempInvitation.product_name" class="form-control">
+                        <select ng-model="tempInvitation.product_id" ng-options="product.code as product.code_desc for product in products" class="form-control">
+						</select>
                     </div>
                 </div>
                 <div class="form-group form-md-line-input">
                     <label class="col-md-4 control-label">כמות</label>
                     <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempInvitation.amount" class="form-control">
+                        <input name="lastName" type="number" ng-model="tempInvitation.amount" class="form-control">
                     </div>
                 </div>
                 <div class="form-group form-md-line-input">
@@ -41,37 +52,7 @@
                 <div class="form-group form-md-line-input">
                     <label class="col-md-4 control-label">נמכר ללקוח</label>
                     <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempInvitation.customer_cost" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group form-md-line-input">
-                    <label class="col-md-4 control-label">רווח</label>
-                    <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempInvitation.profit" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group form-md-line-input">
-                    <label class="col-md-4 control-label">שקלים</label>
-                    <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempInvitation.income_shekels" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group form-md-line-input">
-                    <label class="col-md-4 control-label">דולרים</label>
-                    <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempInvitation.income_dollars" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group form-md-line-input">
-                    <label class="col-md-4 control-label">נשאר לשלם</label>
-                    <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempInvitation.left_cost" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group form-md-line-input">
-                    <label class="col-md-4 control-label">אופן תשלום</label>
-                    <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempInvitation.pay_method" class="form-control">
+                        <input name="lastName" type="number" ng-model="tempInvitation.customer_cost" class="form-control">
                     </div>
                 </div>
                 <div class="form-group form-md-line-input">
@@ -114,7 +95,6 @@
               <td>שקלים</td>
               <td>דולרים</td>
               <td>נשאר לשלם</td>
-              <td>אופן תשלום</td>
               <td>מס דוקט</td>
               <td>הערות</td>
             </thead>
@@ -126,11 +106,10 @@
                 <td ng-click="edit($index)">{{ invitation.amount }}</td>
                 <td ng-click="edit($index)">{{ invitation.airline }}</td>
                 <td ng-click="edit($index)">{{ invitation.customer_cost }}</td>
-                <td ng-click="edit($index)">{{ invitation.profit }}</td>
+                <td ng-click="edit($index)">{{ invitation.customer_cost - invitation.usa_cost }}</td>
                 <td ng-click="edit($index)">{{ invitation.income_shekels }}</td>
                 <td ng-click="edit($index)">{{ invitation.income_dollars }}</td>
-                <td ng-click="edit($index)">{{ invitation.left_cost}}</td>
-                <td ng-click="edit($index)">{{ invitation.pay_mehod }}</td>
+                <td ng-click="edit($index)">{{ invitation.israel_cost - invitation.income_dollars}}</td>
                 <td ng-click="edit($index)">{{ invitation.docket_id }}</td>
                 <td ng-click="edit($index)">{{ invitation.comments }}</td>
               </tr>

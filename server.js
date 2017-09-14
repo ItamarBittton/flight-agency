@@ -4,6 +4,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser');
 
 var google = require('googleapis');
+var sql = require('./Server/mysql.js');
 
 app.use('/js', express.static(__dirname + '/dist/js'));
 app.use('/img', express.static(__dirname + '/dist/img'));
@@ -77,240 +78,291 @@ app.listen(port, function () {
 });
 
 
-app.get('/getActions', function (req, res) {
-    res.send({
-        invitations: [{
-                id: 1,
-                israel_receipt: false,
-                usa_receipt: true,
-                gama_paid: false,
-                vendor_paid: true
-            },
-            {
-                id: 2,
-                israel_receipt: false,
-                usa_receipt: true,
-                gama_paid: false,
-                vendor_paid: true
-            },
-            {
-                id: 4,
-                israel_receipt: false,
-                usa_receipt: true,
-                gama_paid: false,
-                vendor_paid: true
-            },
-            {
-                id: 3,
-                israel_receipt: false,
-                usa_receipt: true,
-                gama_paid: false,
-                vendor_paid: true
-            }
-        ],
-        actions: []
+function updateRow(tableName, obj, callback) {
+    var arrayFromObject = Object.keys(obj).map(key => obj[key]);
+    var keysFromObject = Object.keys(obj).map(key => key);
+    sql.updateRow(tableName, arrayFromObject, keysFromObject, function (err, data) {
+        if (err) {
+            console.log(err);
+            callback({
+                error: 'היתה בעיה בעת עדכון הנתון'
+            })
+        } else {
+            callback({
+                data: data,
+                success: '!הנתון עודכן בהצלחה במערכת'
+            })
+        }
     })
-})
+}
 
+function deleteRow(tableName, objId, callback) {
+    sql.deleteRow(tableName, objId, function (err, data) {
+        if (err) {
+            console.log(err);
+            callback({
+                error: 'היתה בעיה בעת מחיקת הנתון'
+            })
+        } else {
+            callback({
+                data: data,
+                success: '!הנתון נמחק בהצלחה מהמערכת'
+            })
+        }
+    });
+}
 
-app.delete('/deleteInvitation/:id', function (req, res) {
-
-});
-
-app.post('/updateInvitation', function (req, res) {
-
-});
-
-app.get('/getInvitations', function (req, res) {
-
-})
-
-
-app.delete('/deleteCustomer/:id', function (req, res) {
-
-});
-
-app.post('/updateCustomer', function (req, res) {
-
-});
-
-app.get('/getCustomers', function (req, res) {
-    res.send({
-       data: [
-            {
-                id: 1,
-                name: 'sdf',
-                phome: '04124',
-                email: 'fasdf@.col'
-            },
-            {
-                id: 4,
-                name: 'va',
-                phome: '04124',
-                email: 'fasdf@.col'
-            },
-            {
-                id: 5,
-                name: 'gqgf',
-                phome: '04124',
-                email: 'fasdf@.col'
-            },
-            {
-                id: 2,
-                name: 'we',
-                phome: '04124',
-                email: 'fasdf@.col'
-            },
-            {
-                id: 6,
-                name: 'kgf',
-                phome: '04124',
-                email: 'fasdf@.col'
-            },
-        ]
+function selectAll(tableName, callback) {
+    sql.selectAll(tableName, function (err, data) {
+        if (err) {
+            console.log(err);
+            callback({
+                error: 'היתה בעיה בעת שליפת הנתונים'
+            })
+        } else {
+            callback(data)
+        }
     })
- })
+}
 
 
-app.delete('/deleteExpense/:id', function (req, res) {
-
-});
-
-app.post('/updateExpense', function (req, res) {
-
-});
-
-app.get('/getExpenses', function (req, res) { })
-
+/**
+ * Potentails API
+ */
 app.delete('/deletePotential/:id', function (req, res) {
+    var objId = req.params.id;
 
+    deleteRow('tb_orders', objId, function (data) {
+        res.send(data);
+    })
 });
 
 app.post('/updatePotential', function (req, res) {
+    var obj = req.body.data;
 
+    var Potential = {};
+
+    obj.id && (Potential.id = obj.id)
+    Potential.date = obj.date;
+    Potential.customer_id = obj.customer_id;
+    Potential.product_id = obj.product_id;
+    Potential.amount = obj.amount;
+    Potential.offer_comments = obj.offer_comments;
+    Potential.comments = obj.comments;
+    Potential.offer = obj.offer;
+    Potential.status_id = obj.status_id;
+
+
+
+
+    updateRow('tb_orders', Potential, function (data) {
+        res.send(data)
+    })
 });
 
 app.get('/getPotentials', function (req, res) {
+
+    sql.selectQuery.getPotentials(function (err, data) {
+        if (err) {
+            console.log(err);
+            res.send({
+                error: 'היתה בעיה בשליפת הנתונים'
+            })
+        } else {
+            res.send(data)
+        }
+    })
+});
+
+
+/**
+ * Invitations API
+ */
+app.delete('/deleteInvitation/:id', function (req, res) {
+    var objId = req.params.id;
+
+    deleteRow('tb_orders', objId, function (data) {
+        res.send(data);
+    })
+});
+
+app.post('/updateInvitation', function (req, res) {
+    var obj = req.body.data;
+
+    var Invitation = {
+        date: obj.date,
+        customer_id: obj.customer_id,
+        product_id: obj.product_id,
+        amount: obj.amount,
+        airline: obj.airline,
+        customer_cost: obj.customer_cost,
+        docket_id: obj.docket_id,
+        comments: obj.comments,
+        status_id: 4
+    }
+
+    obj.id && (Invitation.id = obj.id);
+
+    updateRow('tb_orders', Invitation, function (data) {
+        res.send(data)
+    })
+});
+
+app.get('/getInvitations', function (req, res) {
+    sql.selectQuery.getInvitations(function (err, data) {
+        if (err) {
+            console.log(err);
+            res.send({
+                error: 'היתה בעיה בעת שליפת הנתונים'
+            })
+        } else {
+            res.send(data)
+        }
+    });
+})
+
+
+/**
+ * Customers API
+ */
+app.delete('/deleteCustomer/:id', function (req, res) {
+    var objId = req.params.id;
+
+    deleteRow('tb_customers', objId, function (data) {
+        res.send(data);
+    })
+});
+
+app.post('/updateCustomer', function (req, res) {
+    var obj = req.body.data;
+
+    updateRow('tb_customers', obj, function (data) {
+        res.send(data)
+    })
+});
+
+app.get('/getCustomers', function (req, res) {
+    selectAll('tb_customers', function (data) {
+        res.send(data);
+    });
+})
+
+
+/**
+ * Actions API
+ */
+app.get('/getActions', function (req, res) {
     res.send({
-        data: [
-            {
-                date: '01/01/2017',
-                customer_id: 123,
-                customer_name: 'ala',
-                customer_phone: 041,
-                product_id: 1234,
-                product_name: 'bab',
-                amount: 1,
-                offer_comments: 'fas',
-                comments: 'asfdasd',
-                offer: 4421.99,
-                status_id: 4,
-                status_name: 'ready'
-            }, {
-                date: '01/01/2017',
-                customer_id: 123,
-                customer_name: 'ala',
-                customer_phone: 041,
-                product_id: 1234,
-                product_name: 'bab',
-                amount: 1,
-                offer_comments: 'fas',
-                comments: 'asfdasd',
-                offer: 4421.99,
-                status_id: 4,
-                status_name: 'ready'
-            }, {
-                date: '01/01/2017',
-                customer_id: 123,
-                customer_name: 'ala',
-                customer_phone: 041,
-                product_id: 1234,
-                product_name: 'bab',
-                amount: 1,
-                offer_comments: 'fas',
-                comments: 'asfdasd',
-                offer: 4421.99,
-                status_id: 4,
-                status_name: 'ready'
-            }, {
-                date: '01/01/2017',
-                customer_id: 123,
-                customer_name: 'ala',
-                customer_phone: 041,
-                product_id: 1234,
-                product_name: 'bab',
-                amount: 1,
-                offer_comments: 'fas',
-                comments: 'asfdasd',
-                offer: 4421.99,
-                status_id: 4,
-                status_name: 'ready'
-            }, {
-                date: '01/01/2017',
-                customer_id: 123,
-                customer_name: 'ala',
-                customer_phone: 041,
-                product_id: 1234,
-                product_name: 'bab',
-                amount: 1,
-                offer_comments: 'fas',
-                comments: 'asfdasd',
-                offer: 4421.99,
-                status_id: 4,
-                status_name: 'ready'
-            }, {
-                date: '01/01/2017',
-                customer_id: 123,
-                customer_name: 'ala',
-                customer_phone: 041,
-                product_id: 1234,
-                product_name: 'bab',
-                amount: 1,
-                offer_comments: 'fas',
-                comments: 'asfdasd',
-                offer: 4421.99,
-                status_id: 4,
-                status_name: 'ready'
-            }, {
-                date: '01/01/2017',
-                customer_id: 123,
-                customer_name: 'ala',
-                customer_phone: 041,
-                product_id: 1234,
-                product_name: 'bab',
-                amount: 1,
-                offer_comments: 'fas',
-                comments: 'asfdasd',
-                offer: 4421.99,
-                status_id: 4,
-                status_name: 'ready'
-            }, {
-                date: '01/01/2017',
-                customer_id: 123,
-                customer_name: 'ala',
-                customer_phone: 041,
-                product_id: 1234,
-                product_name: 'bab',
-                amount: 1,
-                offer_comments: 'fas',
-                comments: 'asfdasd',
-                offer: 4421.99,
-                status_id: 4,
-                status_name: 'ready'
-            }, {
-                date: '01/01/2017',
-                customer_id: 123,
-                customer_name: 'ala',
-                customer_phone: 041,
-                product_id: 1234,
-                product_name: 'bab',
-                amount: 1,
-                offer_comments: 'fas',
-                comments: 'asfdasd',
-                offer: 4421.99,
-                status_id: 4,
-                status_name: 'ready'
-            },
-        ]
+
+    })
+})
+
+
+/**
+ * Reports API
+ */
+
+
+/**
+ * Expenses API
+ */
+app.delete('/deleteExpense/:id', function (req, res) {
+    var objId = req.params.id;
+
+    deleteRow('tb_expenses', objId, function (data) {
+        res.send(data);
+    })
+});
+
+app.post('/updateExpense', function (req, res) {
+    var obj = req.body.data;
+
+    updateRow('tb_expenses', obj, function (data) {
+        res.send(data)
+    })
+});
+
+app.get('/getExpenses', function (req, res) {
+    selectAll('tb_expenses', function (data) {
+        res.send(data);
+    });
+});
+
+
+/**
+ * Incomes API
+ */
+app.delete('/deleteIncome/:id', function (req, res) {
+    var objId = req.params.id;
+
+    deleteRow('tb_incomes', objId, function (data) {
+        res.send(data);
+    })
+});
+
+app.post('/updateIncome', function (req, res) {
+    var obj = req.body.data;
+
+    updateRow('tb_incomes', obj, function (data) {
+        res.send(data)
+    })
+});
+
+app.get('/getIncomes', function (req, res) {
+    selectAll('tb_incomes', function (data) {
+        res.send(data);
+    });
+});
+
+/**
+ * Points API
+ */
+app.delete('/deletePoint/:id', function (req, res) {
+    var objId = req.params.id;
+
+    deleteRow('tb_points', objId, function (data) {
+        res.send(data);
+    })
+});
+
+app.post('/updatePoint', function (req, res) {
+
+    var obj = req.body.data;
+
+    updateRow('tb_points', obj, function (data) {
+        res.send(data)
+    })
+});
+
+app.get('/getPoints', function (req, res) {
+    selectAll('tb_points', function (data) {
+        res.send(data);
+    });
+});
+
+/**
+ * Other API
+ */
+app.get('/getProducts', function (req, res) {
+    selectAll('tbk_products', function (data) {
+        res.send(data);
+    })
+})
+
+app.get('/getStatus', function (req, res) {
+    selectAll('tbk_status', function (data) {
+        res.send(data);
+    })
+})
+
+app.get('/getOrigins', function (req, res) {
+    selectAll('tbk_origins', function (data) {
+        res.send(data);
+    })
+})
+
+app.get('/getExpenseCategories', function (req, res) {
+    selectAll('tbk_expense_categories', function (data) {
+        res.send(data);
     })
 })

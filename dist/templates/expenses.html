@@ -11,19 +11,23 @@
                 <div class="form-group form-md-line-input">
                     <label class="col-md-4 control-label">מזהה</label>
                     <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempExpense.id" class="form-control">
+                        <input name="lastName" type="text" ng-model="tempExpense.id" class="form-control" disabled="disabled">
                     </div>
                 </div>
                 <div class="form-group form-md-line-input">
                     <label class="col-md-4 control-label">מקור</label>
                     <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempExpense.origin" class="form-control">
+                        <!--<input name="lastName" type="text" ng-model="tempExpense.origin" class="form-control">-->
+                        <select ng-model="tempExpense.origin" ng-options="origin.code as origin.code_desc for origin in origins" class="form-control">
+						</select>
                     </div>
                 </div>
                 <div class="form-group form-md-line-input">
                     <label class="col-md-4 control-label">קטגורית הוצאה</label>
                     <div class="col-md-8">
-                        <input name="lastName" type="text" ng-model="tempExpense.expense_category_id" class="form-control">
+                        <!--<input name="lastName" type="text" ng-model="tempExpense.expense_category_id" class="form-control">-->
+                        <select ng-model="tempExpense.expense_category_id" ng-options="expenseC.code as expenseC.code_desc for expenseC in expenseCat" class="form-control">
+						</select>
                     </div>
                 </div>
                 <div class="form-group form-md-line-input">

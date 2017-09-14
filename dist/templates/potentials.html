@@ -1,85 +1,85 @@
 <div class="row" style="margin-top:15px">
-    
-    <div class="col-lg-4">
+
+  <div class="col-lg-4">
     <rd-widget ng-if="display">
-        <rd-widget-header icon="icon-note" title="פרטי הפוטנציאל">
-          <button ng-click="save(false)" class="btn btn-sm btn-info">שמור</button>
-          <button ng-click="save(true)" class="btn btn-sm btn-danger">מחק</button>
-          <button ng-click="close()" class="btn btn-sm btn-warning">בטל</button>
-        </rd-widget-header>
-        <rd-widget-body classes="xxlarge no-padding">
-          <div class="form-group form-md-line-input">
-            <label class="col-md-4 control-label">תאריך</label>
-            <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="tempPotential.date" class="form-control">
-            </div>
+      <rd-widget-header icon="icon-note" title="פרטי הפוטנציאל">
+        <button ng-click="save(false)" class="btn btn-sm btn-info">שמור</button>
+        <button ng-click="save(true)" class="btn btn-sm btn-danger">מחק</button>
+        <button ng-click="close()" class="btn btn-sm btn-warning">בטל</button>
+      </rd-widget-header>
+      <rd-widget-body classes="xxlarge no-padding">
+        <div class="form-group form-md-line-input">
+          <label class="col-md-4 control-label">תאריך</label>
+          <div class="col-md-8">
+            <input name="lastName" type="date" ng-model="tempPotential.date" class="form-control">
           </div>
-          <div class="form-group form-md-line-input">
-            <label class="col-md-4 control-label">שם לקוח</label>
-            <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="tempPotential.customer_name" class="form-control">
-            </div>
+        </div>
+        <div class="form-group form-md-line-input">
+          <label class="col-md-4 control-label">שם לקוח</label>
+          <div class="col-md-8">
+            <!--<input name="lastName" type="text" ng-model="tempPotential.customer_name" class="form-control">-->
+            <select ng-model="tempPotential.customer_id" ng-options="customer.id as customer.name for customer in customers" class="form-control">
+						</select>
           </div>
-          <div class="form-group form-md-line-input">
-            <label class="col-md-4 control-label">טלפון</label>
-            <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="tempPotential.customer_phone" class="form-control">
-            </div>
+        </div>
+        <div class="form-group form-md-line-input">
+          <label class="col-md-4 control-label">מוצר</label>
+          <div class="col-md-8">
+            <select ng-model="tempPotential.product_id" ng-options="product.code as product.code_desc for product in products" class="form-control">
+						</select>
+            <!--<input name="lastName" type="text" ng-model="tempPotential.product_name" class="form-control" >-->
           </div>
-          <div class="form-group form-md-line-input">
-            <label class="col-md-4 control-label">מוצר</label>
-            <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="tempPotential.product_name" class="form-control">
-            </div>
+        </div>
+        <div class="form-group form-md-line-input">
+          <label class="col-md-4 control-label">כמות</label>
+          <div class="col-md-8">
+            <input name="lastName" type="number" ng-model="tempPotential.amount" class="form-control">
           </div>
-          <div class="form-group form-md-line-input">
-            <label class="col-md-4 control-label">כמות</label>
-            <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="tempPotential.amount" class="form-control">
-            </div>
+        </div>
+        <div class="form-group form-md-line-input">
+          <label class="col-md-4 control-label">תיאור מוצר</label>
+          <div class="col-md-8">
+            <input name="lastName" type="text" ng-model="tempPotential.offer_comments" class="form-control">
           </div>
-          <div class="form-group form-md-line-input">
-            <label class="col-md-4 control-label">תיאור מוצר</label>
-            <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="tempPotential.offer_comments" class="form-control">
-            </div>
+        </div>
+        <div class="form-group form-md-line-input">
+          <label class="col-md-4 control-label">הערות</label>
+          <div class="col-md-8">
+            <input name="lastName" type="text" ng-model="tempPotential.comments" class="form-control">
           </div>
-          <div class="form-group form-md-line-input">
-            <label class="col-md-4 control-label">הערות</label>
-            <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="tempPotential.comments" class="form-control">
-            </div>
+        </div>
+        <div class="form-group form-md-line-input">
+          <label class="col-md-4 control-label">הצעת מחיר</label>
+          <div class="col-md-8">
+            <input name="lastName" type="number" ng-model="tempPotential.offer" class="form-control">
           </div>
-          <div class="form-group form-md-line-input">
-            <label class="col-md-4 control-label">הצעת מחיר</label>
-            <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="tempPotential.offer" class="form-control">
-            </div>
+        </div>
+        <div class="form-group form-md-line-input">
+          <label class="col-md-4 control-label">סטטוס</label>
+          <div class="col-md-8">
+            <select ng-model="tempPotential.status_id" ng-options="stat.code as stat.code_desc for stat in status" class="form-control">
+						</select>
+            <!--<input name="lastName" type="text" ng-model="tempPotential.status_name" class="form-control" >-->
           </div>
-          <div class="form-group form-md-line-input">
-            <label class="col-md-4 control-label">סטטוס</label>
-            <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="tempPotential.status_name" class="form-control">
-            </div>
-          </div>
-        </rd-widget-body>
+        </div>
+      </rd-widget-body>
     </rd-widget>
   </div>
 
-    <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
-        <rd-widget>
-            <rd-widget-header icon="icon-notebook" title="פוטנציאלים">
-                <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף פוטנציאל</button>
-                <input type="text" placeholder="חיפוש" ng-model="searchText" class="form-control input-sm">
-                <button class="btn btn-link btn-sm ng-scope" style="padding:0;margin: -5px 0 -10px">
+  <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+    <rd-widget>
+      <rd-widget-header icon="icon-notebook" title="פוטנציאלים">
+        <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף פוטנציאל</button>
+        <input type="text" placeholder="חיפוש" ng-model="searchText" class="form-control input-sm">
+        <button class="btn btn-link btn-sm ng-scope" style="padding:0;margin: -5px 0 -10px">
                     <dir-pagination-controls max-size="7"></dir-pagination-controls>
                 </button>
-            </rd-widget-header>
-            <rd-widget-body classes="xxlarge no-padding">
-                <span ng-if="!load">
+      </rd-widget-header>
+      <rd-widget-body classes="xxlarge no-padding">
+        <span ng-if="!load">
                 <rd-loading></rd-loading>
                 </span>
-                <span ng-if="load">
+        <span ng-if="load">
                     <div class="table-responsive">
           <table class="table">
             <thead>
@@ -109,7 +109,7 @@
           </table>
         </div>
                 </span>
-            </rd-widget-body>
-        </rd-widget>
-    </div>
+      </rd-widget-body>
+    </rd-widget>
+  </div>
 </div>
