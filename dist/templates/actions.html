@@ -4,6 +4,8 @@
         <rd-widget>
             <rd-widget-header icon="icon-notebook" title="עדכון הזמנות">
                 <button ng-click="update('invitations', invitationIdArr)" class="btn btn-sm btn-info pull-left">עדכון הזמנות</button>
+                <button type="file" ngf-select="uploadFiles($file, $invalidFiles)" class="btn btn-sm btn-info pull-left">
+     העלה קובץ</button>
                 <input type="text" placeholder="חיפוש" ng-model="searchText" class="form-control input-sm">
             </rd-widget-header>
             <rd-widget-body classes="xxlarge no-padding">
@@ -14,6 +16,9 @@
                     <div class="table-responsive">
           <table class="table">
             <thead>
+                <td>מזהה</td>
+                <td>תאריך</td>
+                <td>מספר דוקט</td>
               <td>קבלה ישראל</td>
               <td>קבלה חו"ל</td>
               <td>נכנס כסף מגמא</td>
@@ -21,12 +26,15 @@
             </thead>
             <tbody>
               <tr ng-repeat="invitation in invitations track by $index">
-                <td ng-click="invitation.israel_receipt = !invitation.israel_receipt">{{ invitation.israel_receipt }}</td>
-                <td ng-click="invitation.usa_receipt = !invitation.usa_receipt">{{ invitation.usa_receipt }}</td>
-                <td ng-click="invitation.gama_paid = !invitation.gama_paid">{{ invitation.gama_paid }}</td>
-                <td ng-click="invitation.vendor_paid = !invitation.vendor_paid">{{ invitation.vendor_paid }}</td>
+                  <td>{{ invitation.id }}</td>
+                  <td>{{ invitation.date }}</td>
+                  <td>{{ invitation.docket_id }}</td>
+                <td ng-click="invitation.israel_receipt = !invitation.israel_receipt" ng-style="{'background-color':invitation.israel_receipt ? 'green': 'white'}">{{ invitation.israel_receipt ? 'התקבלה' : 'לא התקבלה' }}</td>
+                <td ng-click="invitation.usa_receipt = !invitation.usa_receipt" ng-style="{'background-color':invitation.usa_receipt ? 'green': 'white'}">{{ invitation.usa_receipt ? 'התקבלה' : 'לא התקבלה' }}</td>
+                <td ng-click="invitation.gama_paid = !invitation.gama_paid" ng-style="{'background-color':invitation.gama_paid ? 'green': 'white'}">{{ invitation.gama_paid ? 'שולם' : 'לא שולם' }}</td>
+                <td ng-click="invitation.vendor_paid = !invitation.vendor_paid" ng-style="{'background-color':invitation.vendor_paid ? 'green': 'white'}">{{ invitation.vendor_paid ? 'שולם' : 'לא שולם' }}</td>
                 <td>
-                    <input type="checkbox" checklist-model="invitationIdArr" checklist-value="invitation.id">
+                    <input type="checkbox" ng-click="changeRow($index)">
                 </td>
           </tr></tbody></table>
         </div>

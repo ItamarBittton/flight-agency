@@ -77,38 +77,38 @@ function queryMul(string, arr, callback) {
 //     console.log(data);
 // })
 
-function insert(table, object) {
-    var request = `INSERT INTO ${table} (${tableStruct[table].join(', ')}) VALUES ('${Object.values(object).join("', '")}');`
-    console.log(request);
-    return request;
-}
+// function insert(table, object) {
+//     var request = `INSERT INTO ${table} (${tableStruct[table].join(', ')}) VALUES ('${Object.values(object).join("', '")}');`
+//     console.log(request);
+//     return request;
+// }
 
-function insertArray(table, array, duplicate) {
-    // Validate Keys and Values.
-    var keys = validate(Object.keys(array[0])),
-        splitKeys = keys.split(/\s*'| |,\s*/).filter(Boolean),
-        values = array.map(value => validate(Object.keys(value).map(v => Array.isArray(value[v]) ? JSON.stringify(value[v]) : value[v])));
-    //array.map(value => validate(Object.keys(value).map(v => value[v])));
+// function insertArray(table, array, duplicate) {
+//     // Validate Keys and Values.
+//     var keys = validate(Object.keys(array[0])),
+//         splitKeys = keys.split(/\s*'| |,\s*/).filter(Boolean),
+//         values = array.map(value => validate(Object.keys(value).map(v => Array.isArray(value[v]) ? JSON.stringify(value[v]) : value[v])));
+//     //array.map(value => validate(Object.keys(value).map(v => value[v])));
 
-    // Build request string.
-    var request = [
-        'INSERT INTO',
-        table,
-        '(',
-        splitKeys,
-        ') VALUES ',
-        values.map(value => '(' + value + ')')
-        // array.map(val => `( ${Object.values(val).map(v => v ? "'" + v + "'" : 'null').join(", ")})`)
-    ];
+//     // Build request string.
+//     var request = [
+//         'INSERT INTO',
+//         table,
+//         '(',
+//         splitKeys,
+//         ') VALUES ',
+//         values.map(value => '(' + value + ')')
+//         // array.map(val => `( ${Object.values(val).map(v => v ? "'" + v + "'" : 'null').join(", ")})`)
+//     ];
 
-    // Upsert.
-    if (duplicate) {
-        request.push('ON DUPLICATE KEY UPDATE',
-            splitKeys.map((x, i) => x + '=VALUES(' + x + ')'))
-    }
+//     // Upsert.
+//     if (duplicate) {
+//         request.push('ON DUPLICATE KEY UPDATE',
+//             splitKeys.map((x, i) => x + '=VALUES(' + x + ')'))
+//     }
 
-    return request.join(' ');
-}
+//     return request.join(' ');
+// }
 
 function selectAll(tableName, callback) {
     query(`SELECT *
@@ -120,6 +120,16 @@ function selectAll(tableName, callback) {
 
 function updateRow(tableName, arr, keys, callback) {
     query(`REPLACE INTO ${tableName} (${keys.map(val => val)}) VALUES (${keys.map(val => '? ')})`
+        , function (data) {
+            callback(data.error, data.results);
+        },
+        arr)
+}
+
+function updateMulRow(tableName, arr, keys, callback){
+    var str = `REPLACE INTO ${tableName} (${keys.map(val => val)}) VALUES ${arr.map(val => '(?)')}`;
+    arr = arr.map(key => Object.keys(key).map(k => key[k])); 
+    query(str
         , function (data) {
             callback(data.error, data.results);
         },
@@ -144,7 +154,8 @@ var selectQuery = {
     left outer join (select order_id, sum(shekels) as shekels, sum(dollars) as dollars
                      from tb_incomes
                      group by order_id) t4 on (t1.id = t4.order_id)
-                     where status_id = 4`, function (data) {
+    left outer join tbk_vendors t5 on (t1.vendor_id = t5.code)
+    where status_id = 4`, function (data) {
                 callback(data.error, data.results);
             });
     },
@@ -155,21 +166,24 @@ var selectQuery = {
                         left outer join tb_customers t2 on (t1.customer_id = t2.id)
                         left outer join tbk_products t3 on (t1.product_id = t3.code)
                         left outer join tbk_status t4 on (t1.status_id = t4.code)
-                   where t1.status_id != 4`, function(data){
+                   where t1.status_id != 4`, (data) => {
                        callback(data.error, data.results);
                    })
+    },
+
+    getActions: (callback) => {
+        query(`select t1.id, t1.date, t1.docket_id, t1.israel_receipt, t1.usa_receipt, t1.gama_paid, t1.vendor_paid
+        from tb_orders t1`,
+         (data) => callback(data.error, data.results))
     }
 
 }
 
 module.exports = {
-    v: validate,
-    mq: multiQuery,
-    q: query,
-    i: insert,
-    ia: insertArray,
+
     selectAll: selectAll,
     updateRow: updateRow,
+    updateMulRow: updateMulRow,
     deleteRow: deleteRow,
     selectQuery: selectQuery
 };

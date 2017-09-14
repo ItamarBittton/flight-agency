@@ -96,6 +96,30 @@ function updateRow(tableName, obj, callback) {
     })
 }
 
+function updateMulRow(tableName, obj, callback) {
+    // get Only once the keys
+    if (Object.keys(obj) !== 0) {
+        var keysFromObject = obj[0];
+        var keys = Object.keys(keysFromObject).map(key => key);
+        var arrayFromObject = Object.keys(obj).map(key => obj[key]);
+        sql.updateMulRow(tableName, arrayFromObject, keys, function (err, data) {
+            if (err) {
+                console.log(err);
+                callback({
+                    error: 'היתה בעיה בעת עדכון הנתונים'
+                })
+            } else {
+                callback({
+                    data: data,
+                    success: '!הנתונים עודכנו בהצלחה במערכת'
+                })
+            }
+        })
+    } else {
+        callback({ error: 'אין אפשרות לעדכן נתון ריק' })
+    }
+}
+
 function deleteRow(tableName, objId, callback) {
     sql.deleteRow(tableName, objId, function (err, data) {
         if (err) {
@@ -252,11 +276,25 @@ app.get('/getCustomers', function (req, res) {
  * Actions API
  */
 app.get('/getActions', function (req, res) {
-    res.send({
-
+    sql.selectQuery.getActions(function (err, data) {
+         if (err) {
+            console.log(err);
+            res.send({
+                error: 'היתה בעיה בעת שליפת הנתונים'
+            })
+        } else {
+            res.send(data)
+        }
     })
 })
 
+app.post('/updateActions', function (req, res) {
+    var obj = req.body.data;
+
+    updateMulRow('tb_orders', obj, function (data) {
+        res.send(data)
+    })
+});
 
 /**
  * Reports API
@@ -363,6 +401,12 @@ app.get('/getOrigins', function (req, res) {
 
 app.get('/getExpenseCategories', function (req, res) {
     selectAll('tbk_expense_categories', function (data) {
+        res.send(data);
+    })
+})
+
+app.get('/getVendors', function (req, res) {
+    selectAll('tbk_vendors', function (data) {
         res.send(data);
     })
 })
